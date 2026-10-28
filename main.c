@@ -2,13 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include "user.h"
-
+#include "book.h"
 int main()
 {
     int operation;
-    user_t admin = {"admin", "", 0, NULL};
-    user_ptr_t admin_ptr = &admin; //头指针
+    user_t admin = {"admin", "", 0, NULL};//管理员是0号用户
+    user_ptr_t admin_ptr = &admin; 
     int next_user_id = 1;
+    book_t User_Manual = {"User Manual", "Library Management System", 2026, 0, NULL}; // 使用手册是0号书
+    book_ptr_t User_Manual_ptr = &User_Manual;
+    int next_book_id = 1;
 set_admin_password:
     printf("请设置管理员密码：");
     if (scanf("%19s", admin.password) != 1)
@@ -20,7 +23,12 @@ set_admin_password:
     while (1)
     {
         printf("你好！，欢迎使用图书管理系统！\n");
-        enum { 登录 = 1, 注册, 退出 };
+        enum
+        {
+            登录 = 1,
+            注册,
+            退出
+        };
         printf("请选择操作：1.登录 2.注册 3.退出\n");
         if (scanf("%d", &operation) != 1)
         {
@@ -31,7 +39,7 @@ set_admin_password:
         {
         case 登录:
         {
-            user_ptr_t logged_in_user = login_user(users);
+            user_ptr_t logged_in_user = login_user(admin_ptr);
             if (logged_in_user != NULL)
             {
                 if (logged_in_user->id == 0)
