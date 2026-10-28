@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-void sign_up(user_ptr_t head_ptr, int *next_id_ptr)
+void sign_up(user_ptr_t head_ptr, int *next_user_id_ptr)
 {
-    if (head_ptr == NULL || next_id_ptr == NULL) // 这段检查在当前调用方式下不会触发；保留它是为了防止以后其他调用者传入空指针。
+    if (head_ptr == NULL || next_user_id_ptr == NULL) // 这段检查在当前调用方式下不会触发；保留它是为了防止以后其他调用者传入空指针。
     {
         return;
     }
@@ -85,7 +85,7 @@ password_input:
         printf("两次输入的密码不一致，请重新输入密码：\n");
         goto password_input;
     }
-    new_user_ptr->id = *next_id_ptr;
+    new_user_ptr->id = *next_user_id_ptr;
     new_user_ptr->next = NULL;
 
     user_ptr_t current = head_ptr;
@@ -95,6 +95,6 @@ password_input:
     }
     current->next = new_user_ptr;
 
-    (*next_id_ptr)++;
+    (*next_user_id_ptr)++;
     printf("注册成功！你的用户 ID 是：%d\n", new_user_ptr->id);
 }
