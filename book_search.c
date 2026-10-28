@@ -1,87 +1,80 @@
 #include <stdio.h>
-#include <string.h>
 #include "book.h"
-#include "input_utils.h"
+#include <string.h>
 
 void book_search(book_ptr_t head)
 {
-    if (head == NULL)
+    int operation;
+    while (1)
     {
-        printf("暂无图书信息。\n");
-        return;
-    }
-
-    for (;;)
-    {
-        int operation;
-        printf("请选择查询方式：1.书名 2.作者 3.年份 4.退出\n");
+        printf("请选择您需要的查询方式：1.书名 2.作者 3.年份 4.退出");
+        enum operation
+        {
+            书名 = 1,
+            作者,
+            年份,
+            退出
+        };
         if (scanf("%d", &operation) != 1)
         {
-            input_discard_line();
-            printf("输入无效，查询结束。\n");
-            return;
+            printf("输入无效，请输入 1、2 或 3。\n");
+            continue;
         }
-
-        if (operation == 4)
+        switch (operation)
         {
-            return;
+        case 书名:
+        {
+            printf("请输入查询书名：");
+            char arr[50] = {0};
+            if (scanf("%49s", &arr) != 1)
+            {
+                printf("输入无效，书籍查询失败！\n");
+                return NULL;
+            }
+            for (book_ptr_t cerrent = head; cerrent->next != NULL; cerrent = cerrent->next)
+            {
+                if ((strstr((cerrent->title), arr)) != NULL)
+                    printf("找到书目名字为%s，编号为：%d", cerrent->title, cerrent->id);
+            }
+            break;
         }
-
-        if (operation == 1 || operation == 2)
+        case 作者:
         {
-            char query[50];
-            printf("请输入查询%s：", operation == 1 ? "书名" : "作者");
-            if (scanf(" %49[^\n]", query) != 1)
+            printf("请输入查询作者名：");
+            char arr[50] = {0};
+            if (scanf("%49s", &arr) != 1)
             {
-                printf("输入无效，查询结束。\n");
-                return;
+                printf("输入无效，书籍查询失败！\n");
+                return NULL;
             }
-
-            int found = 0;
-            for (book_ptr_t current = head; current != NULL; current = current->next)
+            for (book_ptr_t cerrent = head; cerrent->next != NULL; cerrent = cerrent->next)
             {
-                const char *field = operation == 1 ? current->title : current->author;
-                if (strstr(field, query) != NULL)
-                {
-                    printf("书名：%s，作者：%s，编号：%d，年份：%d\n",
-                           current->title, current->author, current->id, current->year);
-                    found = 1;
-                }
+                if ((strstr((cerrent->author), arr)) != NULL)
+                    printf("找到书目名字为%s，编号为：%d", cerrent->title, cerrent->id);
             }
-            if (!found)
-            {
-                printf("没有找到符合条件的图书。\n");
-            }
+            break;
         }
-        else if (operation == 3)
+        case 年份:
         {
-            int search_year;
             printf("请输入查询年份：");
-            if (scanf("%d", &search_year) != 1)
+            int search_year;
+            if (scanf("%d", search_year) != 1)
             {
-                input_discard_line();
-                printf("输入无效，查询结束。\n");
-                return;
+                printf("输入无效，书籍查询失败！\n");
+                return NULL;
             }
-
-            int found = 0;
-            for (book_ptr_t current = head; current != NULL; current = current->next)
+            for (book_ptr_t cerrent = head; cerrent->next != NULL; cerrent = cerrent->next)
             {
-                if (current->year == search_year)
-                {
-                    printf("书名：%s，作者：%s，编号：%d，年份：%d\n",
-                           current->title, current->author, current->id, current->year);
-                    found = 1;
-                }
+                if ((cerrent->year) == search_year)
+                    printf("找到书目名字为%s，编号为：%d", cerrent->title, cerrent->id);
             }
-            if (!found)
-            {
-                printf("没有找到符合条件的图书。\n");
-            }
+            break;
         }
-        else
-        {
+        case 退出:
+            return;
+        default:
             printf("无效的操作。\n");
+            continue;
         }
     }
 }

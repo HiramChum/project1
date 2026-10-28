@@ -1,13 +1,20 @@
 #include <stdio.h>
 #include <string.h>
 #include "book_borrow.h"
-#include "input_utils.h"
 
-void book_return(book_borrow_ptr_t book_borrow_head, int user_id)
+void book_return(book_borrow_ptr_t book_borrow_head)
 {
-    if (book_borrow_head == NULL || user_id < 0)
+    if (book_borrow_head == NULL)
     {
         printf("当前没有借阅记录！\n");
+        return;
+    }
+
+    int user_id;
+    printf("请输入您的ID：\n");
+    if (scanf("%d", &user_id) != 1)
+    {
+        printf("输入无效！\n");
         return;
     }
 
@@ -18,7 +25,7 @@ void book_return(book_borrow_ptr_t book_borrow_head, int user_id)
     }
     if (borrower == NULL || borrower->own_book <= 0 || borrower->own_book > 5)
     {
-        printf("您当前没有借阅记录！\n");
+        printf("没有找到该用户的借阅记录！\n");
         return;
     }
 
@@ -55,9 +62,13 @@ void book_return(book_borrow_ptr_t book_borrow_head, int user_id)
 
     int confirmation;
     printf("确认归还请输入1，取消请输入0：\n");
-    if (scanf("%d", &confirmation) != 1 || confirmation != 1)
+    if (scanf("%d", &confirmation) != 1)
     {
-        input_discard_line();
+        printf("输入无效！\n");
+        return;
+    }
+    if (confirmation != 1)
+    {
         printf("已取消归还。\n");
         return;
     }
